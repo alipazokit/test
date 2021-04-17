@@ -900,16 +900,24 @@ for (int jack_index=0;jack_index<Njack;jack_index++){	 //// loop over number of 
         	 g.p.resize(g.Nsegments_hori,std::vector<int>(Nindv));
         	 g.not_O_i.resize(jack_bin[jack_index][bin_index]);
         	 g.not_O_j.resize(Nindv);
-		initial_var();
+		//initial_var();
 		
 
 ////////////////////////////////// multiplication
 	MatrixXdr temp1;
 	MatrixXdr temp2;
-	temp1=MatrixXdr::Random(Nindv,Nz);     /// lets asssume number of columns in temp1= number of rows in temp2=Nz, Nz is given as input argument of the code with -k
-	temp2=MatrixXdr::Random(Nz,num_snp);
-	MatrixXdr out1=compute_Xtz(num_snp,temp1,Nz); /// compute X^t*temp1 where X is Nindv*num_snp genotype block and temp1 is Nindv*Nz matrix
-	MatrixXdr out2=compute_Xz(num_snp,temp2,Nz); /// compute X*temp2 where X is Nindv*num_snp genotype block anf temp2 is Nz*num_snp matrix
+	int dim1=100;
+	int dim2=10;
+	temp1=MatrixXdr::Random(Nindv,dim1);     /// generate random matrix temp1
+	temp2=MatrixXdr::Random(dim2,num_snp);   /// generate random matrix temp2
+	
+	k=dim1;
+	initial_var();
+	MatrixXdr out1=compute_Xtz(num_snp,temp1,dim1); /// compute X^t*temp1 where X is Nindv*num_snp genotype block (this block includes SNPs in the stream block "jack_index" and annotation "bin_index"   ) 
+
+	k=dim2;
+	initial_var();
+	MatrixXdr out2=compute_Xz(num_snp,temp2,dim2); /// compute X*temp2 where X is Nindv*num_snp genotype block 
 //////////////////////////////////////end
 	cout<<" Reading and computing bin "<<bin_index <<"  of "<< jack_index<<"-th is finished"<<endl;
 	   
